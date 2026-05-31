@@ -1,0 +1,5 @@
+{"policy_id":"POL-001","title":"Incident Response Procedure","control_id":"CC6.6","last_reviewed":"2026-01-15","status":"active"}
+{"policy_id":"POL-002","title":"Production Access Control Policy","control_id":"CC6.1","last_reviewed":"2026-02-01","status":"active"}
+{"policy_id":"POL-003","title":"Vulnerability Management Policy","control_id":"A.12.6.1","last_reviewed":"2025-11-01","status":"needs_update"}
+{"policy_id":"POL-004","title":"Security Training Policy","control_id":"A.9.2.1","last_reviewed":"2026-01-20","status":"active"}
+{"policy_id":"POL-005","title":"Remediation Tracking Policy","control_id":"CC7.1","last_reviewed":"2026-03-10","status":"active"}

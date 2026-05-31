@@ -1,0 +1,37 @@
+name: notion
+version: 0.1.0
+dsl_version: 3
+backend: jsonl
+tables:
+  - name: policies
+    description: Notion policy documents
+    source:
+      location: file://./coral/fixtures/notion/policies/
+      glob: "*.jsonl"
+    columns:
+      - name: policy_id
+        type: Utf8
+      - name: title
+        type: Utf8
+      - name: control_id
+        type: Utf8
+      - name: last_reviewed
+        type: Utf8
+      - name: status
+        type: Utf8
+  - name: training
+    description: Notion training records
+    source:
+      location: file://./coral/fixtures/notion/training/
+      glob: "*.jsonl"
+    columns:
+      - name: training_id
+        type: Utf8
+      - name: title
+        type: Utf8
+      - name: assignee
+        type: Utf8
+      - name: status
+        type: Utf8
+      - name: due_date
+        type: Utf8

@@ -17,6 +17,9 @@ import {
   Search,
   Cpu,
   Loader2,
+  Wrench,
+  Copy,
+  Check,
 } from "lucide-react"
 import { clsx } from "clsx"
 
@@ -62,6 +65,13 @@ function FindingRow({
   defaultOpen?: boolean
 }) {
   const [open, setOpen] = useState(defaultOpen ?? false)
+  const [copied, setCopied] = useState(false)
+
+  const copySql = () => {
+    navigator.clipboard.writeText(finding.sqlQuery)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <div className="clickup-card overflow-hidden mb-2">
@@ -105,8 +115,35 @@ function FindingRow({
                 <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Evidence</div>
                 <p className="text-sm text-slate-700">{finding.evidence}</p>
               </div>
+              {finding.remediationAction && finding.status === "fail" && (
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-orange-50 border border-orange-200">
+                  <Wrench className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-orange-900 mb-1">Action Required</div>
+                    <p className="text-sm text-orange-800">{finding.remediationAction}</p>
+                  </div>
+                </div>
+              )}
               <div>
-                <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1.5">SQL Query</div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider">SQL Query</div>
+                  <button
+                    onClick={copySql}
+                    className="text-xs text-slate-500 hover:text-slate-700 flex items-center gap-1 px-2 py-1 rounded hover:bg-slate-100"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-3 h-3" />
+                        Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3" />
+                        Copy
+                      </>
+                    )}
+                  </button>
+                </div>
                 <pre className="text-xs text-slate-700 bg-white border border-slate-200 rounded-lg p-3 overflow-x-auto shadow-sm">
                   {finding.sqlQuery}
                 </pre>
@@ -180,9 +217,14 @@ function AgentFeed({ events }: { events: AgentEvent[] }) {
                 {event.payload.message as string ?? ""}
               </p>
               {(event.payload as { sqlQuery?: string }).sqlQuery && (
-                <pre className="mt-2 text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2.5 overflow-x-auto">
-                  {(event.payload as { sqlQuery: string }).sqlQuery}
-                </pre>
+                <div className="mt-2">
+                  <div className="text-[10px] font-bold uppercase tracking-wide text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded w-fit mb-1.5">
+                    SQL
+                  </div>
+                  <pre className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2.5 overflow-x-auto">
+                    {(event.payload as { sqlQuery: string }).sqlQuery}
+                  </pre>
+                </div>
               )}
             </div>
           </motion.div>
@@ -196,15 +238,37 @@ function AgentFeed({ events }: { events: AgentEvent[] }) {
 export default function AuditWeaverPage() {
   const [frameworks, setFrameworks] = useState<string[]>(["SOC2"])
   const [provider] = useState("openrouter")
-  const [model] = useState("deepseek/deepseek-v4-flash")
+  const [model, setModel] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("audit_weaver_model") || "deepseek/deepseek-v4-flash"
+    }
+    return "deepseek/deepseek-v4-flash"
+  })
   const [running, setRunning] = useState(false)
   const [events, setEvents] = useState<AgentEvent[]>([])
   const [findings, setFindings] = useState<Finding[]>([])
   const [summary, setSummary] = useState<AuditResult["summary"] | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [schemaTables, setSchemaTables] = useState<number>(0)
-  const [schemaSources, setSchemaSources] = useState<number>(0)
+  const [schemaTables, setSchemaTables] = useState(0)
+  const [schemaSources, setSchemaSources] = useState(0)
   const abortRef = useRef<AbortController | null>(null)
+
+  const [customApiKey, setCustomApiKey] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("audit_weaver_api_key") || ""
+    }
+    return ""
+  })
+
+  const handleApiKeyChange = (val: string) => {
+    setCustomApiKey(val)
+    localStorage.setItem("audit_weaver_api_key", val)
+  }
+
+  const handleModelChange = (val: string) => {
+    setModel(val)
+    localStorage.setItem("audit_weaver_model", val)
+  }
 
   const handleRunAudit = useCallback(async () => {
     setRunning(true)
@@ -222,7 +286,7 @@ export default function AuditWeaverPage() {
       const response = await fetch("/api/agent/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ frameworks, provider, model }),
+        body: JSON.stringify({ frameworks, provider, model, customApiKey }),
         signal: abort.signal,
       })
 
@@ -289,7 +353,7 @@ export default function AuditWeaverPage() {
       setRunning(false)
       abortRef.current = null
     }
-  }, [frameworks, provider, model])
+  }, [frameworks, provider, model, customApiKey])
 
   const handleStopAudit = useCallback(() => {
     abortRef.current?.abort()
@@ -311,7 +375,7 @@ export default function AuditWeaverPage() {
       <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0">
           <div className="h-16 flex items-center px-6 border-b border-slate-200">
               <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold mr-3 shadow-sm">C</div>
-              <span className="font-semibold text-lg tracking-tight text-slate-900">Coral Audit</span>
+              <span className="font-semibold text-lg tracking-tight text-slate-900">Coral Reef</span>
           </div>
           <div className="flex-1 py-6 px-4 space-y-1">
               <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-2">Navigation</div>
@@ -323,7 +387,7 @@ export default function AuditWeaverPage() {
                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Frameworks</div>
               </div>
               <div className="space-y-1.5 px-2">
-                {["SOC2", "ISO_27001"].map((fw) => (
+                {["SOC2", "ISO_27001", "PCI_DSS"].map((fw) => (
                   <button
                     key={fw}
                     onClick={() => toggleFramework(fw)}
@@ -335,18 +399,49 @@ export default function AuditWeaverPage() {
                         : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
                     )}
                   >
-                    {fw.replace("_", " ")}
+                    {fw === "PCI_DSS" ? "PCI-DSS" : fw.replace("_", " ")}
                   </button>
                 ))}
               </div>
 
               <div className="mt-8 mb-3 px-2">
-                 <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Model Config</div>
+                 <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Model</div>
               </div>
               <div className="px-2">
-                 <div className="text-xs font-medium text-slate-500 bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg truncate">
-                    {model}
-                 </div>
+                 <select
+                   value={model}
+                   onChange={(e) => handleModelChange(e.target.value)}
+                   disabled={running}
+                   className="w-full text-xs font-mono bg-white border border-slate-200 px-3 py-2 rounded-lg focus:outline-none focus:border-indigo-500 shadow-sm disabled:opacity-50"
+                 >
+                   <option value="deepseek/deepseek-v4-flash">DeepSeek V4 Flash</option>
+                   <option value="deepseek/deepseek-chat">DeepSeek V3</option>
+                   <option value="anthropic/claude-sonnet-4-20250514">Claude Sonnet 4</option>
+                   <option value="anthropic/claude-3.5-haiku">Claude 3.5 Haiku</option>
+                   <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
+                   <option value="openai/o3-mini">o3 Mini</option>
+                   <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+                 </select>
+                 <p className="text-[10px] text-slate-400 px-1 mt-1.5 leading-normal">
+                   Stored locally. Any OpenRouter model ID works.
+                 </p>
+              </div>
+
+              <div className="mt-8 mb-3 px-2">
+                 <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">API Key Config</div>
+              </div>
+              <div className="px-2 space-y-1.5">
+                 <input
+                   type="password"
+                   placeholder="Enter OpenRouter Key"
+                   value={customApiKey}
+                   onChange={(e) => handleApiKeyChange(e.target.value)}
+                   disabled={running}
+                   className="w-full text-xs font-mono bg-white border border-slate-200 px-3 py-2 rounded-lg focus:outline-none focus:border-indigo-500 placeholder-slate-400 shadow-sm"
+                 />
+                 <p className="text-[10px] text-slate-400 px-1 leading-normal">
+                   Stored locally. Leave blank to use server environment key.
+                 </p>
               </div>
           </div>
       </aside>

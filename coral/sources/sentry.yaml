@@ -1,0 +1,25 @@
+name: sentry
+version: 0.1.0
+dsl_version: 3
+backend: jsonl
+tables:
+  - name: issues
+    description: Sentry issues
+    source:
+      location: file://./coral/fixtures/sentry/issues/
+      glob: "*.jsonl"
+    columns:
+      - name: issue_id
+        type: Utf8
+      - name: title
+        type: Utf8
+      - name: severity
+        type: Utf8
+      - name: resource_arn
+        type: Utf8
+      - name: release_version
+        type: Utf8
+      - name: first_seen
+        type: Utf8
+      - name: status
+        type: Utf8

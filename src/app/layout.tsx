@@ -8,7 +8,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Audit Weaver — Compliance Audit Agent",
+  title: "Coral Reef — Multi-Agent Compliance Auditor",
   description: "Multi-agent compliance auditing powered by Coral",
 }
 

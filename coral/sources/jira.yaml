@@ -1,0 +1,27 @@
+name: jira
+version: 0.1.0
+dsl_version: 3
+backend: jsonl
+tables:
+  - name: issues
+    description: Jira remediation tickets
+    source:
+      location: file://./coral/fixtures/jira/issues/
+      glob: "*.jsonl"
+    columns:
+      - name: issue_key
+        type: Utf8
+      - name: summary
+        type: Utf8
+      - name: status
+        type: Utf8
+      - name: assignee
+        type: Utf8
+      - name: created
+        type: Utf8
+      - name: due_date
+        type: Utf8
+      - name: linked_control
+        type: Utf8
+      - name: sentry_issue_id
+        type: Utf8

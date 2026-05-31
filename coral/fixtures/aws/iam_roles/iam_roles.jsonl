@@ -1,0 +1,5 @@
+{"role_name":"prod-admin","arn":"arn:aws:iam::123456789012:role/prod-admin","assigned_users":"alice@corp.com,bob@corp.com","environment":"production"}
+{"role_name":"staging-admin","arn":"arn:aws:iam::123456789012:role/staging-admin","assigned_users":"charlie@corp.com","environment":"staging"}
+{"role_name":"db-admin","arn":"arn:aws:iam::123456789012:role/db-admin","assigned_users":"diana@corp.com","environment":"production"}
+{"role_name":"dev-admin","arn":"arn:aws:iam::123456789012:role/dev-admin","assigned_users":"eve@corp.com","environment":"development"}
+{"role_name":"security-auditor","arn":"arn:aws:iam::123456789012:role/security-auditor","assigned_users":"frank@corp.com","environment":"production"}

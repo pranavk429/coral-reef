@@ -1,0 +1,35 @@
+name: okta
+version: 0.1.0
+dsl_version: 3
+backend: jsonl
+tables:
+  - name: users
+    description: Okta users
+    source:
+      location: file://./coral/fixtures/okta/users/
+      glob: "*.jsonl"
+    columns:
+      - name: email
+        type: Utf8
+      - name: name
+        type: Utf8
+      - name: role
+        type: Utf8
+      - name: department
+        type: Utf8
+      - name: mfa_enrolled
+        type: Boolean
+  - name: sessions
+    description: Okta user sessions
+    source:
+      location: file://./coral/fixtures/okta/sessions/
+      glob: "*.jsonl"
+    columns:
+      - name: user_email
+        type: Utf8
+      - name: role_arn
+        type: Utf8
+      - name: last_login
+        type: Utf8
+      - name: mfa_used
+        type: Boolean

@@ -1,0 +1,5 @@
+{"issue_key":"SEC-100","summary":"Enforce MFA on all production EC2 admin sessions","status":"open","assignee":"bob@corp.com","created":"2026-05-01","due_date":"2026-06-15","linked_control":"CC6.1","sentry_issue_id":null}
+{"issue_key":"SEC-101","summary":"Document incident response for critical Sentry errors","status":"in_progress","assignee":"alice@corp.com","created":"2026-05-10","due_date":"2026-05-30","linked_control":"CC6.6","sentry_issue_id":null}
+{"issue_key":"SEC-102","summary":"Review and patch memory leak in image worker","status":"done","assignee":"charlie@corp.com","created":"2026-04-20","due_date":"2026-05-01","linked_control":"A.12.6.1","sentry_issue_id":"SENTRY-1002"}
+{"issue_key":"SEC-103","summary":"Update vulnerability management policy","status":"open","assignee":"frank@corp.com","created":"2026-05-15","due_date":"2026-06-01","linked_control":"A.12.6.1","sentry_issue_id":null}
+{"issue_key":"SEC-104","summary":"Investigate and fix NullPointerException in checkout","status":"in_progress","assignee":"charlie@corp.com","created":"2026-05-26","due_date":"2026-06-02","linked_control":"CC7.1","sentry_issue_id":"SENTRY-1001"}

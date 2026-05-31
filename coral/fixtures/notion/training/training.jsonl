@@ -1,0 +1,7 @@
+{"training_id":"TR-001","title":"Security Awareness Q1 2026","assignee":"alice@corp.com","status":"completed","due_date":"2026-03-31"}
+{"training_id":"TR-002","title":"Security Awareness Q1 2026","assignee":"bob@corp.com","status":"in_progress","due_date":"2026-03-31"}
+{"training_id":"TR-003","title":"Security Awareness Q1 2026","assignee":"diana@corp.com","status":"completed","due_date":"2026-03-31"}
+{"training_id":"TR-004","title":"Incident Response Training","assignee":"alice@corp.com","status":"completed","due_date":"2026-04-30"}
+{"training_id":"TR-005","title":"Incident Response Training","assignee":"bob@corp.com","status":"not_started","due_date":"2026-04-30"}
+{"training_id":"TR-006","title":"Security Awareness Q1 2026","assignee":"charlie@corp.com","status":"completed","due_date":"2026-03-31"}
+{"training_id":"TR-007","title":"Security Awareness Q1 2026","assignee":"eve@corp.com","status":"not_started","due_date":"2026-03-31"}
