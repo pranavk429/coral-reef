@@ -408,22 +408,16 @@ export default function AuditWeaverPage() {
                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Model</div>
               </div>
               <div className="px-2">
-                 <select
+                 <input
+                   type="text"
                    value={model}
                    onChange={(e) => handleModelChange(e.target.value)}
                    disabled={running}
-                   className="w-full text-xs font-mono bg-white border border-slate-200 px-3 py-2 rounded-lg focus:outline-none focus:border-indigo-500 shadow-sm disabled:opacity-50"
-                 >
-                   <option value="deepseek/deepseek-v4-flash">DeepSeek V4 Flash</option>
-                   <option value="deepseek/deepseek-chat">DeepSeek V3</option>
-                   <option value="anthropic/claude-sonnet-4-20250514">Claude Sonnet 4</option>
-                   <option value="anthropic/claude-3.5-haiku">Claude 3.5 Haiku</option>
-                   <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
-                   <option value="openai/o3-mini">o3 Mini</option>
-                   <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-                 </select>
+                   placeholder="deepseek/deepseek-v4-flash"
+                   className="w-full text-xs font-mono bg-white border border-slate-200 px-3 py-2 rounded-lg focus:outline-none focus:border-indigo-500 placeholder-slate-400 shadow-sm disabled:opacity-50"
+                 />
                  <p className="text-[10px] text-slate-400 px-1 mt-1.5 leading-normal">
-                   Stored locally. Any OpenRouter model ID works.
+                   Any OpenRouter model ID. Popular: Claude Sonnet 4, GPT-4o, Gemini 2.0 Flash, Mistral Large
                  </p>
               </div>
 
