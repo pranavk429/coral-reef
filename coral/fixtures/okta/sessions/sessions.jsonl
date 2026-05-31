@@ -1,0 +1,5 @@
+{"user_email":"alice@corp.com","role_arn":"arn:aws:iam::123456789012:role/prod-admin","last_login":"2026-05-27T08:30:00Z","mfa_used":true}
+{"user_email":"bob@corp.com","role_arn":"arn:aws:iam::123456789012:role/prod-admin","last_login":"2026-05-27T09:00:00Z","mfa_used":false}
+{"user_email":"diana@corp.com","role_arn":"arn:aws:iam::123456789012:role/db-admin","last_login":"2026-05-26T14:00:00Z","mfa_used":true}
+{"user_email":"charlie@corp.com","role_arn":"arn:aws:iam::123456789012:role/staging-admin","last_login":"2026-05-25T11:00:00Z","mfa_used":true}
+{"user_email":"eve@corp.com","role_arn":"arn:aws:iam::123456789012:role/dev-admin","last_login":"2026-05-27T07:00:00Z","mfa_used":false}

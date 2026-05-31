@@ -1,0 +1,6 @@
+{"email":"alice@corp.com","name":"Alice Smith","role":"admin","department":"Engineering","mfa_enrolled":true}
+{"email":"bob@corp.com","name":"Bob Jones","role":"admin","department":"Engineering","mfa_enrolled":false}
+{"email":"charlie@corp.com","name":"Charlie Brown","role":"developer","department":"Engineering","mfa_enrolled":true}
+{"email":"diana@corp.com","name":"Diana Prince","role":"admin","department":"DevOps","mfa_enrolled":true}
+{"email":"eve@corp.com","name":"Eve Adams","role":"developer","department":"Engineering","mfa_enrolled":false}
+{"email":"frank@corp.com","name":"Frank Castle","role":"auditor","department":"Security","mfa_enrolled":true}

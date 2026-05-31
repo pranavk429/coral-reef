@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Coral Reef
 
-## Getting Started
+Multi-agent compliance auditing system powered by [Coral](https://withcoral.com). Automates SOC 2, ISO 27001, and PCI DSS evidence collection by writing cross-source SQL queries across your enterprise tool stack.
 
-First, run the development server:
+Built for the [Pirates of the Coral-bean](https://www.wemakedevs.org/hackathons/coral) hackathon by WeMakeDevs.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+**Live demo**: [https://coral2.vercel.app](https://coral2.vercel.app)
+
+## How It Works
+
+1. **Schema Scout** discovers available Coral sources and their schemas
+2. **Evidence Gatherer** uses an LLM to write precise SQL queries for each compliance control
+3. **Report Weaver** analyzes results and produces structured findings (PASS/FAIL)
+4. **Remediation Engine** creates tickets for failed controls
+
+All agents coordinate through a Supervisor with isolated context windows — no single agent holds all the context.
+
+## Try It Live
+
+Visit **[https://coral2.vercel.app](https://coral2.vercel.app)**, enter an OpenRouter API key in the sidebar (or set the `OPENROUTER_API_KEY` environment variable), select your compliance frameworks, and click **Run Audit**.
+
+The app uses a built-in mock SQL engine — no database or CLI binary required.
+
+## Environment Variables
+
+- `OPENROUTER_API_KEY` - Required. Get one at https://openrouter.ai/keys
+- `CORAL_PATH` - Optional. Path to Coral binary (defaults to `/opt/homebrew/bin/coral`)
+
+## Compliance Controls
+
+| ID | Framework | Description | Sources Joined |
+|---|---|---|---|---|
+| CC6.1 | SOC2 | Production access requires MFA | AWS × Okta |
+| CC6.6 | SOC2 | Critical incidents have documented response | Sentry × Notion |
+| CC7.1 | SOC2 | Unresolved critical errors have tickets | Sentry × Jira |
+| A.12.6.1 | ISO 27001 | Vulnerabilities reviewed within 30 days | Sentry × Jira |
+| A.9.2.1 | ISO 27001 | Admin roles require completed training | AWS × Okta × Notion |
+| PCI-DSS 8.2.1 | PCI_DSS | Admin accounts must have MFA enrolled | Okta |
+| PCI-DSS 8.2.2 | PCI_DSS | Production sessions must use MFA | Okta |
+
+## Architecture
+
+```
+User → Supervisor → Schema Scout → Evidence Gatherer → Report Weaver → Remediation Engine
+                          ↓                ↓                  ↓                ↓
+                     Mock Engine     Mock Engine + LLM    LLM Analysis     Mock Tickets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The **Mock Engine** is a pure TypeScript SQL query interpreter that reads JSONL fixture data from `coral/fixtures/`. On platforms where the Coral CLI is unavailable (Vercel), it seamlessly falls back to an in-memory copy of the same fixture data — no database or binary required.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: Next.js 16, React 19
+- **Styling**: Tailwind CSS v4, Framer Motion
+- **AI**: DeepSeek V4 Flash via OpenRouter (configurable)
+- **Data**: Coral CLI (local) or in-memory mock engine (Vercel) with JSONL fixtures
 
-## Learn More
+## Run Locally
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+cp .env.local.example .env.local
+# Edit .env.local and add your OPENROUTER_API_KEY
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For local SQL debugging with the real Coral CLI:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+brew install withcoral/tap/coral
+./register-sources.sh
+coral source list
+```
 
-## Deploy on Vercel
+When Coral CLI is not found, the app seamlessly falls back to the in-memory mock engine.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*Built with AI assistance. Powered by Coral.*

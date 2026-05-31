@@ -1,0 +1,37 @@
+name: aws
+version: 0.1.0
+dsl_version: 3
+backend: jsonl
+tables:
+  - name: ec2
+    description: AWS EC2 instances
+    source:
+      location: file://./coral/fixtures/aws/ec2/
+      glob: "*.jsonl"
+    columns:
+      - name: instance_id
+        type: Utf8
+      - name: name
+        type: Utf8
+      - name: environment
+        type: Utf8
+      - name: arn
+        type: Utf8
+      - name: admin_role
+        type: Utf8
+      - name: state
+        type: Utf8
+  - name: iam_roles
+    description: AWS IAM roles
+    source:
+      location: file://./coral/fixtures/aws/iam_roles/
+      glob: "*.jsonl"
+    columns:
+      - name: role_name
+        type: Utf8
+      - name: arn
+        type: Utf8
+      - name: assigned_users
+        type: Utf8
+      - name: environment
+        type: Utf8
