@@ -252,6 +252,7 @@ export default function AuditWeaverPage() {
   const [schemaTables, setSchemaTables] = useState(0)
   const [schemaSources, setSchemaSources] = useState(0)
   const abortRef = useRef<AbortController | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const [customApiKey, setCustomApiKey] = useState(() => {
     if (typeof window !== "undefined") {
@@ -370,9 +371,17 @@ export default function AuditWeaverPage() {
   const failed = findings.filter((f) => f.status === "fail").length
 
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-full relative">
+      {/* Mobile overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-20 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0">
+      <aside className={`w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 fixed lg:static inset-y-0 left-0 z-30 transition-transform duration-200 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
           <div className="h-16 flex items-center px-6 border-b border-slate-200">
               <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold mr-3 shadow-sm">C</div>
               <span className="font-semibold text-lg tracking-tight text-slate-900">Coral Reef</span>
@@ -442,8 +451,19 @@ export default function AuditWeaverPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-auto bg-[#F8F9FA]">
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8">
-            <h1 className="text-xl font-semibold tracking-tight text-slate-900">Audit Overview</h1>
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-8">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate-500"
+                aria-label="Open menu"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <h1 className="text-lg md:text-xl font-semibold tracking-tight text-slate-900">Audit Overview</h1>
+            </div>
             {running ? (
               <button
                 onClick={handleStopAudit}
@@ -464,7 +484,7 @@ export default function AuditWeaverPage() {
             )}
         </header>
 
-        <div className="p-8 max-w-6xl mx-auto space-y-8">
+        <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-4 md:space-y-8">
             {/* Scanning animation */}
             <AnimatePresence>
               {running && (
